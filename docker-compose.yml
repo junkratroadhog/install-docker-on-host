@@ -1,0 +1,24 @@
+services:
+  my-jenkins:
+    build:
+      context: .
+    container_name: my-jenkins
+    restart: on-failure
+    privileged: true          # optional but sometimes needed for some docker operations
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock  # mount host Docker socket
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    networks:
+      - jenkins
+    environment:
+      - JAVA_OPTS=-Xms1g -Xmx2g
+
+networks:
+  jenkins:
+    driver: bridge
+
+volumes:
+  jenkins-data:
